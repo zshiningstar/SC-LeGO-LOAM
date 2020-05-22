@@ -124,7 +124,7 @@ Visualization Manager:
       Color: 255; 255; 0
       Color Transformer: FlatColor
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 96
@@ -141,7 +141,7 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -367,7 +367,7 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 1349
+      Max Intensity: 2022
       Min Color: 0; 0; 0
       Min Intensity: 0
       Name: Trajectory
@@ -442,11 +442,11 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: false
-    - Alpha: 0.5
+    - Alpha: 0.4000000059604645
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 30.90037727355957
-        Min Value: -19.6578311920166
+        Max Value: 91.88262939453125
+        Min Value: -6.433389663696289
         Value: true
       Axis: Y
       Channel Name: intensity
@@ -547,26 +547,37 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Class: rviz/Orbit
-      Distance: 429.6766662597656
+      Class: jsk_rviz_plugin/TabletViewController
+      Control Mode: Orbit
+      Distance: 314.1254577636719
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
-      Focal Point:
-        X: 11.250335693359375
-        Y: -16.68450164794922
-        Z: -96.23580932617188
-      Focal Shape Fixed Size: true
-      Focal Shape Size: 0.05000000074505806
+      Eye:
+        X: -503.9184265136719
+        Y: 0.752105712890625
+        Z: 89.40088653564453
+      Focus:
+        X: -251.76788330078125
+        Y: -80.0166015625
+        Z: -79.62964630126953
       Invert Z Axis: false
+      Maintain Vertical Axis: true
+      Mouse Enabled: true
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.4397964477539062
-      Target Frame: base_link
-      Value: Orbit (rviz)
-      Yaw: 1.0781841278076172
+      Placement Mouse Point: /rviz/current_mouse_point
+      Placement Publish Topic: /rviz/current_camera_placement
+      Placement Topic: /rviz/camera_placement
+      Target Frame: map
+      Transition Time: 0.5
+      Up:
+        X: 0
+        Y: 0
+        Z: 1
+      Value: TabletViewController (jsk_rviz_plugin)
     Saved: ~
 Window Geometry:
   Displays:
