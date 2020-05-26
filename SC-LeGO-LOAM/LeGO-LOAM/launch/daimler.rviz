@@ -367,7 +367,7 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 2022
+      Max Intensity: 24
       Min Color: 0; 0; 0
       Min Intensity: 0
       Name: Trajectory
@@ -445,8 +445,8 @@ Visualization Manager:
     - Alpha: 0.4000000059604645
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 91.88262939453125
-        Min Value: -6.433389663696289
+        Max Value: 17.041852951049805
+        Min Value: -5.4572930335998535
         Value: true
       Axis: Y
       Channel Name: intensity
@@ -547,37 +547,21 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Class: jsk_rviz_plugin/TabletViewController
-      Control Mode: Orbit
-      Distance: 314.1254577636719
+      Angle: 0
+      Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
-      Eye:
-        X: -503.9184265136719
-        Y: 0.752105712890625
-        Z: 89.40088653564453
-      Focus:
-        X: -251.76788330078125
-        Y: -80.0166015625
-        Z: -79.62964630126953
       Invert Z Axis: false
-      Maintain Vertical Axis: true
-      Mouse Enabled: true
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Placement Mouse Point: /rviz/current_mouse_point
-      Placement Publish Topic: /rviz/current_camera_placement
-      Placement Topic: /rviz/camera_placement
-      Target Frame: map
-      Transition Time: 0.5
-      Up:
-        X: 0
-        Y: 0
-        Z: 1
-      Value: TabletViewController (jsk_rviz_plugin)
+      Scale: 7.74399995803833
+      Target Frame: base_link
+      Value: TopDownOrtho (rviz)
+      X: 0
+      Y: 0
     Saved: ~
 Window Geometry:
   Displays:
