@@ -747,6 +747,24 @@ public:
         } 
     }
 
+    pcl::PointCloud<PointType>::Ptr TransformMap(const pcl::PointCloud<PointType>::Ptr in_pc){
+
+        pcl::PointCloud<pcl::PointXYZ>::Ptr transformed_pc_ptr(new pcl::PointCloud<pcl::PointXYZ>);
+
+        double _tf_roll = 1.570795;
+        double _tf_pitch = 0.0;
+        double _tf_yaw = 1.570795;
+        Eigen::Translation3f tl_m2w(0.0, 0.0, 0.0);                 // tl: translation
+        Eigen::AngleAxisf rot_x_m2w(_tf_roll, Eigen::Vector3f::UnitX());  // rot: rotation
+        Eigen::AngleAxisf rot_y_m2w(_tf_pitch, Eigen::Vector3f::UnitY());
+        Eigen::AngleAxisf rot_z_m2w(_tf_yaw, Eigen::Vector3f::UnitZ());
+        Eigen::Matrix4f tf_m2w = (tl_m2w * rot_z_m2w * rot_y_m2w * rot_x_m2w).matrix();
+
+        pcl::transformPointCloud(*in_pc, *transformed_pc_ptr, tf_m2w);
+
+        return transformed_pc_ptr;
+    }
+
     void visualizeGlobalMapThread(){
         ros::Rate rate(0.2);
         while (ros::ok()){

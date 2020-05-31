@@ -21,7 +21,7 @@ find_package(catkin REQUIRED COMPONENTS
   cloud_msgs
 )
 
-find_package (Eigen3 3.3 REQUIRED NO_MODULE)
+# find_package (Eigen3 REQUIRED NO_MODULE)
 find_package(GTSAM REQUIRED QUIET)
 find_package(PCL REQUIRED QUIET)
 find_package(OpenCV REQUIRED QUIET)
@@ -64,7 +64,7 @@ target_link_libraries(mapOptmization
     ${PCL_LIBRARIES} 
     ${OpenCV_LIBRARIES} 
     gtsam
-    Eigen3::Eigen
+    # Eigen3::Eigen
 )
 
 add_executable(transformFusion src/transformFusion.cpp)
