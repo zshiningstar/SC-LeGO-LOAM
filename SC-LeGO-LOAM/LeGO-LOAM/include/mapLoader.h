@@ -21,8 +21,6 @@ public:
 
 private:
     sensor_msgs::PointCloud2 CreatePcd();
-    sensor_msgs::PointCloud2 TransformMap(sensor_msgs::PointCloud2 & in);
-    void SaveMap(const pcl::PointCloud<pcl::PointXYZ>::Ptr map_pc_ptr);
 }; //MapLoader
 
 #endif

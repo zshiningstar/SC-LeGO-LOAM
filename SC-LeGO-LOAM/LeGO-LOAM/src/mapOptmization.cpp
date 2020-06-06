@@ -230,6 +230,9 @@ private:
     float cRoll, sRoll, cPitch, sPitch, cYaw, sYaw, tX, tY, tZ;
     float ctRoll, stRoll, ctPitch, stPitch, ctYaw, stYaw, tInX, tInY, tInZ;
 
+    std::string pcd_file_path;
+    float init_tf_x, init_tf_y, init_tf_z, init_tf_roll, init_tf_pitch, init_tf_yaw;
+
     // // loop detector 
     SCManager scManager;
 
@@ -276,6 +279,15 @@ public:
 
         aftMappedTrans.frame_id_ = "/camera_init";
         aftMappedTrans.child_frame_id_ = "/aft_mapped";
+
+        nh.param<std::string>("file_dir", pcd_file_path, "/tmp/");
+
+        nh.param<float>("x", init_tf_x, 0.0);
+        nh.param<float>("y", init_tf_y, 0.0);
+        nh.param<float>("z", init_tf_z, 0.0);
+        nh.param<float>("roll", init_tf_roll, 0.0);
+        nh.param<float>("pitch", init_tf_pitch, 0.0);
+        nh.param<float>("yaw", init_tf_yaw, 0.0);
 
         allocateMemory();
     }
@@ -747,22 +759,42 @@ public:
         } 
     }
 
-    pcl::PointCloud<PointType>::Ptr TransformMap(const pcl::PointCloud<PointType>::Ptr in_pc){
+    void TransformAndSaveMap(){
 
-        pcl::PointCloud<pcl::PointXYZ>::Ptr transformed_pc_ptr(new pcl::PointCloud<pcl::PointXYZ>);
+        Eigen::Translation3f tf_t(init_tf_x, init_tf_y, init_tf_z);         // tl: translation
+        Eigen::AngleAxisf rot_x(init_tf_roll, Eigen::Vector3f::UnitX());    // rot: rotation
+        Eigen::AngleAxisf rot_y(init_tf_pitch, Eigen::Vector3f::UnitY());
+        Eigen::AngleAxisf rot_z(init_tf_yaw, Eigen::Vector3f::UnitZ());
+        Eigen::Matrix4f map_to_init_trans_matrix = (tf_t * rot_z * rot_y * rot_x).matrix();
 
-        double _tf_roll = 1.570795;
-        double _tf_pitch = 0.0;
-        double _tf_yaw = 1.570795;
-        Eigen::Translation3f tl_m2w(0.0, 0.0, 0.0);                 // tl: translation
-        Eigen::AngleAxisf rot_x_m2w(_tf_roll, Eigen::Vector3f::UnitX());  // rot: rotation
-        Eigen::AngleAxisf rot_y_m2w(_tf_pitch, Eigen::Vector3f::UnitY());
-        Eigen::AngleAxisf rot_z_m2w(_tf_yaw, Eigen::Vector3f::UnitZ());
-        Eigen::Matrix4f tf_m2w = (tl_m2w * rot_z_m2w * rot_y_m2w * rot_x_m2w).matrix();
+        pcl::PointCloud<PointType>::Ptr transformed_pc_ptr(new pcl::PointCloud<PointType>());
 
-        pcl::transformPointCloud(*in_pc, *transformed_pc_ptr, tf_m2w);
+        pcl::transformPointCloud(*globalMapKeyFramesDS, *transformed_pc_ptr, map_to_init_trans_matrix);
 
-        return transformed_pc_ptr;
+        pcl::io::savePCDFileASCII(pcd_file_path+"finalCloud.pcd", *transformed_pc_ptr);
+
+        // pcl::PointCloud<PointType>::Ptr cornerMapCloud(new pcl::PointCloud<PointType>());
+        // pcl::PointCloud<PointType>::Ptr cornerMapCloudDS(new pcl::PointCloud<PointType>());
+        // pcl::PointCloud<PointType>::Ptr surfaceMapCloud(new pcl::PointCloud<PointType>());
+        // pcl::PointCloud<PointType>::Ptr surfaceMapCloudDS(new pcl::PointCloud<PointType>());
+        
+        // for(int i = 0; i < cornerCloudKeyFrames.size(); i++) {
+        //     *cornerMapCloud  += *transformPointCloud(cornerCloudKeyFrames[i],   &cloudKeyPoses6D->points[i]);
+    	//     *surfaceMapCloud += *transformPointCloud(surfCloudKeyFrames[i],     &cloudKeyPoses6D->points[i]);
+    	//     *surfaceMapCloud += *transformPointCloud(outlierCloudKeyFrames[i],  &cloudKeyPoses6D->points[i]);
+        // }
+
+        // downSizeFilterCorner.setInputCloud(cornerMapCloud);
+        // downSizeFilterCorner.filter(*cornerMapCloudDS);
+        // downSizeFilterSurf.setInputCloud(surfaceMapCloud);
+        // downSizeFilterSurf.filter(*surfaceMapCloudDS);
+
+        // pcl::transformPointCloud(*globalMapKeyFramesDS, *transformed_pc_ptr, map_to_init_trans_matrix);
+
+        // pcl::io::savePCDFileASCII(pcd_file_path+"cornerMap.pcd", *cornerMapCloudDS);
+        // pcl::io::savePCDFileASCII(pcd_file_path+"surfaceMap.pcd", *surfaceMapCloudDS);
+        // pcl::io::savePCDFileASCII(pcd_file_path+"trajectory.pcd", *cloudKeyPoses3D);
+
     }
 
     void visualizeGlobalMapThread(){
@@ -772,31 +804,9 @@ public:
             publishGlobalMap();
         }
         // save final point cloud
-        pcl::io::savePCDFileASCII(fileDirectory+"finalCloud.pcd", *globalMapKeyFramesDS);
 
-        string cornerMapString = "/tmp/cornerMap.pcd";
-        string surfaceMapString = "/tmp/surfaceMap.pcd";
-        string trajectoryString = "/tmp/trajectory.pcd";
+        TransformAndSaveMap();
 
-        pcl::PointCloud<PointType>::Ptr cornerMapCloud(new pcl::PointCloud<PointType>());
-        pcl::PointCloud<PointType>::Ptr cornerMapCloudDS(new pcl::PointCloud<PointType>());
-        pcl::PointCloud<PointType>::Ptr surfaceMapCloud(new pcl::PointCloud<PointType>());
-        pcl::PointCloud<PointType>::Ptr surfaceMapCloudDS(new pcl::PointCloud<PointType>());
-        
-        for(int i = 0; i < cornerCloudKeyFrames.size(); i++) {
-            *cornerMapCloud  += *transformPointCloud(cornerCloudKeyFrames[i],   &cloudKeyPoses6D->points[i]);
-    	    *surfaceMapCloud += *transformPointCloud(surfCloudKeyFrames[i],     &cloudKeyPoses6D->points[i]);
-    	    *surfaceMapCloud += *transformPointCloud(outlierCloudKeyFrames[i],  &cloudKeyPoses6D->points[i]);
-        }
-
-        downSizeFilterCorner.setInputCloud(cornerMapCloud);
-        downSizeFilterCorner.filter(*cornerMapCloudDS);
-        downSizeFilterSurf.setInputCloud(surfaceMapCloud);
-        downSizeFilterSurf.filter(*surfaceMapCloudDS);
-
-        pcl::io::savePCDFileASCII(fileDirectory+"cornerMap.pcd", *cornerMapCloudDS);
-        pcl::io::savePCDFileASCII(fileDirectory+"surfaceMap.pcd", *surfaceMapCloudDS);
-        pcl::io::savePCDFileASCII(fileDirectory+"trajectory.pcd", *cloudKeyPoses3D);
     }
 
     void publishGlobalMap(){
