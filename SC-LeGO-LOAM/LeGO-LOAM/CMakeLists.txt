@@ -19,6 +19,8 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   nav_msgs
   cloud_msgs
+
+  tf2_ros
 )
 
 # find_package (Eigen3 REQUIRED NO_MODULE)
@@ -73,3 +75,6 @@ target_link_libraries(transformFusion ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${Ope
 
 add_executable(mapLoader src/mapLoader.cpp)
 target_link_libraries(mapLoader ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${OpenCV_LIBRARIES})
+
+add_executable(projectRgb src/projectRgb.cpp src/projectRgb.h)
+target_link_libraries(projectRgb ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${OpenCV_LIBRARIES})

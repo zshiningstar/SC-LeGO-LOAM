@@ -1,0 +1,11 @@
+<launch>
+    
+    <arg name="points_topic"  default="/kitti/velo/pointcloud"/>
+    <arg name="image_topic" default="/kitti/camera_color_left/image_raw"/>
+
+    <node pkg="lego_loam" type="projectRgb"   name="projectRgb"    output="screen">
+        <param name="points_topic" value="$(arg points_topic)"/>
+        <param name="image_topic" value="$(arg image_topic)"/>
+    </node>
+
+</launch>
