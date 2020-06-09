@@ -45,17 +45,20 @@
 #include <thread>
 #include <mutex>
 
+#include "pointxyzirgb.h"
+
 #define PI 3.14159265
 
 using namespace std;
 // rosbag filter "HK-Data20190316-2 20190331_NJ_LL.bag" "lidaronly_HK-Data20190316-2 20190331_NJ_LL.bag" "topic == '/velodyne_points'"
 // rosbag filter "HK-Data20190117.bag" "lidaronly_HK-Data20190117.bag" "topic == '/velodyne_points'"
 
-typedef pcl::PointXYZI  PointType;
+
+// typedef pcl::PointXYZI  PointType;
 
 // extern const string pointCloudTopic = "/velodyne_points";
 // extern const string pointCloudTopic = "/kitti_scan";
-extern const string pointCloudTopic = "/os1_points";
+extern const string pointCloudTopic = "/colored_points";
 extern const string imuTopic = "/imu/data";
 
 // disabled, it would be better to save the pcd in $(find lego_loam)/map folder

@@ -148,7 +148,7 @@ std::pair<double, int> SCManager::distanceBtnScanContext( MatrixXd &_sc1, Matrix
 } // distanceBtnScanContext
 
 
-MatrixXd SCManager::makeScancontext( pcl::PointCloud<SCPointType> & _scan_down )
+MatrixXd SCManager::makeScancontext( pcl::PointCloud<PointType> & _scan_down )
 {
     TicToc t_making_desc;
 
@@ -158,7 +158,7 @@ MatrixXd SCManager::makeScancontext( pcl::PointCloud<SCPointType> & _scan_down )
     const int NO_POINT = -1000;
     MatrixXd desc = NO_POINT * MatrixXd::Ones(PC_NUM_RING, PC_NUM_SECTOR);
 
-    SCPointType pt;
+    PointType pt;
     float azim_angle, azim_range; // wihtin 2d plane
     int ring_idx, sctor_idx;
     for (int pt_idx = 0; pt_idx < num_pts_scan_down; pt_idx++)
@@ -227,7 +227,7 @@ MatrixXd SCManager::makeSectorkeyFromScancontext( Eigen::MatrixXd &_desc )
 } // SCManager::makeSectorkeyFromScancontext
 
 
-void SCManager::makeAndSaveScancontextAndKeys( pcl::PointCloud<SCPointType> & _scan_down )
+void SCManager::makeAndSaveScancontextAndKeys( pcl::PointCloud<PointType> & _scan_down )
 {
     Eigen::MatrixXd sc = makeScancontext(_scan_down); // v1 
     Eigen::MatrixXd ringkey = makeRingkeyFromScancontext( sc );

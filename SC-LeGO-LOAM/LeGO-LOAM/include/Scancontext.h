@@ -27,6 +27,8 @@
 
 #include "tictoc.h"
 
+#include "pointxyzirgb.h"
+
 using namespace Eigen;
 using namespace nanoflann;
 
@@ -38,7 +40,8 @@ using std::atan2;
 using std::cos;
 using std::sin;
 
-using SCPointType = pcl::PointXYZI; // using xyz only. but a user can exchange the original bin encoding function (i.e., max hegiht) to max intensity (for detail, refer 20 ICRA Intensity Scan Context)
+// typedef PointXYZIRGB  PointType;
+// using PointType = PointXYZIRGB;
 using KeyMat = std::vector<std::vector<float> >;
 using InvKeyTree = KDTreeVectorOfVectorsAdaptor< KeyMat, float >;
 
@@ -60,7 +63,7 @@ class SCManager
 public: 
     SCManager( ) = default; // reserving data space (of std::vector) could be considered. but the descriptor is lightweight so don't care.
 
-    Eigen::MatrixXd makeScancontext( pcl::PointCloud<SCPointType> & _scan_down );
+    Eigen::MatrixXd makeScancontext( pcl::PointCloud<PointType> & _scan_down );
     Eigen::MatrixXd makeRingkeyFromScancontext( Eigen::MatrixXd &_desc );
     Eigen::MatrixXd makeSectorkeyFromScancontext( Eigen::MatrixXd &_desc );
 
@@ -69,7 +72,7 @@ public:
     std::pair<double, int> distanceBtnScanContext ( MatrixXd &_sc1, MatrixXd &_sc2 ); // "D" (eq 6) in the original paper (IROS 18)
 
     // User-side API
-    void makeAndSaveScancontextAndKeys( pcl::PointCloud<SCPointType> & _scan_down );
+    void makeAndSaveScancontextAndKeys( pcl::PointCloud<PointType> & _scan_down );
     std::pair<int, float> detectLoopClosureID( void ); // int: nearest node index, float: relative yaw  
 
 public:
