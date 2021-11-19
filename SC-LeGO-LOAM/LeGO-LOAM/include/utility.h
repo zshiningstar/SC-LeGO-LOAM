@@ -55,7 +55,7 @@ typedef pcl::PointXYZI  PointType;
 
 // extern const string pointCloudTopic = "/velodyne_points";
 // extern const string pointCloudTopic = "/kitti_scan";
-extern const string pointCloudTopic = "/os1_points";
+extern const string pointCloudTopic = "/fusion_topic_";
 extern const string imuTopic = "/imu/data";
 
 // disabled, it would be better to save the pcd in $(find lego_loam)/map folder
@@ -107,12 +107,26 @@ extern const bool useCloudRing = false; // if true, ang_res_y and ang_bottom are
 // extern const int groundScanInd = 7;
 
 // Ouster OS1-64
-extern const int N_SCAN = 64;
-extern const int Horizon_SCAN = 1024;
+//extern const int N_SCAN = 64;
+//extern const int Horizon_SCAN = 1024;
+//extern const float ang_res_x = 360.0/float(Horizon_SCAN);
+//extern const float ang_res_y = 33.2/float(N_SCAN-1);
+//extern const float ang_bottom = 16.6+0.1;
+//extern const int groundScanInd = 15;
+
+//Robosense 16
+//雷达线束
+extern const int N_SCAN = 16;
+//每根激光线束横向的点数
+extern const int Horizon_SCAN = 1800;
+//横向解析度
 extern const float ang_res_x = 360.0/float(Horizon_SCAN);
-extern const float ang_res_y = 33.2/float(N_SCAN-1);
-extern const float ang_bottom = 16.6+0.1;
-extern const int groundScanInd = 15;
+//纵向解析度
+extern const float ang_res_y = 30.0/float(N_SCAN-1);
+//激光雷达最低线束的俯角
+extern const float ang_bottom = 15;
+//考虑使用ring0~7线束中的点作为地面分割
+extern const int groundScanInd = 7;
 
 extern const bool loopClosureEnableFlag = true;
 extern const double mappingProcessInterval = 0.3;
