@@ -263,7 +263,7 @@ public:
         pubRegisteredCloud = nh.advertise<sensor_msgs::PointCloud2>("/registered_cloud", 2);
 
         float filter_size;
-        downSizeFilterCorner.setLeafSize(0.2, 0.2, 0.2);
+        downSizeFilterCorner.setLeafSize(0.2, 0.2, 0.2);//对边缘特征局部地图降采样的leaf_size为0.2
         filter_size = 0.5; downSizeFilterScancontext.setLeafSize(filter_size, filter_size, filter_size);
         filter_size = 0.3; downSizeFilterSurf.setLeafSize(filter_size, filter_size, filter_size); // default 0.4;
         downSizeFilterOutlier.setLeafSize(0.4, 0.4, 0.4);
@@ -853,7 +853,7 @@ public:
         // globalMapKeyFramesDS->clear();     
     }
 
-
+//制图的同时,另外一个线程执行闭环检测,但是执行的频率比制图低
     void loopClosureThread(){
 
         if (loopClosureEnableFlag == false)
@@ -1186,11 +1186,11 @@ public:
                         recentOutlierCloudKeyFrames.push_back(transformPointCloud(outlierCloudKeyFrames[latestFrameID]));
                     }
                 }
-
+                //将位姿图中搜索得到的最近的50个位姿对应的特征点加到局部地图中
                 for (int i = 0; i < recentCornerCloudKeyFrames.size(); ++i){
-                    *laserCloudCornerFromMap += *recentCornerCloudKeyFrames[i];
-                    *laserCloudSurfFromMap   += *recentSurfCloudKeyFrames[i];
-                    *laserCloudSurfFromMap   += *recentOutlierCloudKeyFrames[i];
+                    *laserCloudCornerFromMap += *recentCornerCloudKeyFrames[i];//边缘特征局部地图
+                    *laserCloudSurfFromMap   += *recentSurfCloudKeyFrames[i];//平面特征局部地图
+                    *laserCloudSurfFromMap   += *recentOutlierCloudKeyFrames[i];//其余点的局部地图
                 }
     	}else{
             surroundingKeyPoses->clear();
@@ -1248,6 +1248,7 @@ public:
                 *laserCloudSurfFromMap   += *surroundingOutlierCloudKeyFrames[i];
             }
     	}
+    	//加速配准,对边缘特征和平面局部特征进行降采样
         // Downsample the surrounding corner key frames (or map)
         downSizeFilterCorner.setInputCloud(laserCloudCornerFromMap);
         downSizeFilterCorner.filter(*laserCloudCornerFromMapDS);

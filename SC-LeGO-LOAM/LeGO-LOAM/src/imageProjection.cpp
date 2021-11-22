@@ -222,6 +222,7 @@ public:
             thisPoint.y = laserCloudIn->points[i].y;
             thisPoint.z = laserCloudIn->points[i].z;
             // find the row and column index in the iamge for this point
+            //计算点在图像中的行和列索引(此处为点云图变为深度图之后的点)
             if (useCloudRing == true){
                 rowIdn = laserCloudInRing->points[i].ring;
             }

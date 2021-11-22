@@ -139,6 +139,7 @@ extern const float sensorMinimumRange = 3.0;
 extern const float sensorMountAngle = 0.0;
 extern const float segmentTheta = 60.0/180.0*M_PI; // decrese this value may improve accuracy
 extern const int segmentValidPointNum = 5;
+//聚类跨越的线束,至少跨越3个ring的目标才是合法聚类
 extern const int segmentValidLineNum = 3;
 extern const float segmentAlphaX = ang_res_x / 180.0 * M_PI;
 extern const float segmentAlphaY = ang_res_y / 180.0 * M_PI;
@@ -153,6 +154,7 @@ extern const float nearestFeatureSearchSqDist = 25;
 
 
 // Mapping Params
+//
 extern const float surroundingKeyframeSearchRadius = 50.0; // key frame that is within n meters from current pose will be considerd for scan-to-map optimization (when loop closure disabled)
 extern const int   surroundingKeyframeSearchNum = 50; // submap size (when loop closure enabled)
 
