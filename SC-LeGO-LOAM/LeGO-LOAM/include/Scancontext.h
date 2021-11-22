@@ -75,23 +75,31 @@ public:
 public:
     // hyper parameters ()
     const double LIDAR_HEIGHT = 2.0; // lidar height : add this for simply directly using lidar scan in the lidar local coord (not robot base coord) / if you use robot-coord-transformed lidar scans, just set this as 0.
-
+    //ring数量
     const int    PC_NUM_RING = 20; // 20 in the original paper (IROS 18)
+    //sector数量
     const int    PC_NUM_SECTOR = 60; // 60 in the original paper (IROS 18)
+    //只考虑80米范围内的点,即点云的最大截取距离
     const double PC_MAX_RADIUS = 80.0; // 80 meter max in the original paper (IROS 18)
+    //每个sector之间的角度
     const double PC_UNIT_SECTORANGLE = 360.0 / double(PC_NUM_SECTOR);
+    //每个ring之间距离
     const double PC_UNIT_RINGGAP = PC_MAX_RADIUS / double(PC_NUM_RING);
 
     // tree
+    //只有缓存中的帧数量大于50是才进行闭环检测
     const int    NUM_EXCLUDE_RECENT = 50; // simply just keyframe gap, but node position distance-based exclusion is ok. 
+    //设定K临近算法在KD树中搜索的候选帧数量
     const int    NUM_CANDIDATES_FROM_TREE = 10; // 10 is enough. (refer the IROS 18 paper)
 
     // loop thres
     const double SEARCH_RATIO = 0.1; // for fast comparison, no Brute-force, but search 10 % is okay. // but may well work for same-direction-revisits, not for reverse-revisits
     // const double SC_DIST_THRES = 0.13; // empirically 0.1-0.2 is fine (rare false-alarms) for 20x60 polar context (but for 0.15 <, DCS or ICP fit score check (e.g., in LeGO-LOAM) should be required for robustness)
+    //设定最终SC的相似性阈值,当两个场景的相似性得分小于阈值,则认为为同一场景
     const double SC_DIST_THRES = 0.5; // 0.4-0.6 is good choice for using with robust kernel (e.g., Cauchy, DCS) + icp fitness threshold
 
     // config 
+    //并不是每一次闭环检测都需要重构KD树,为节省计算时间,设置TREE_MAKING_PERIOD_指定重构KD树的频率
     const int    TREE_MAKING_PERIOD_ = 50; // i.e., remaking tree frequency, to avoid non-mandatory every remaking, to save time cost
     int          tree_making_period_conter = 0;
 

@@ -147,7 +147,7 @@ std::pair<double, int> SCManager::distanceBtnScanContext( MatrixXd &_sc1, Matrix
 
 } // distanceBtnScanContext
 
-
+//提取SC描述符
 MatrixXd SCManager::makeScancontext( pcl::PointCloud<SCPointType> & _scan_down )
 {
     TicToc t_making_desc;
@@ -194,7 +194,7 @@ MatrixXd SCManager::makeScancontext( pcl::PointCloud<SCPointType> & _scan_down )
     return desc;
 } // SCManager::makeScancontext
 
-
+//求ring key特征
 MatrixXd SCManager::makeRingkeyFromScancontext( Eigen::MatrixXd &_desc )
 {
     /* 
@@ -210,7 +210,7 @@ MatrixXd SCManager::makeRingkeyFromScancontext( Eigen::MatrixXd &_desc )
     return invariant_key;
 } // SCManager::makeRingkeyFromScancontext
 
-
+//提取sector特征
 MatrixXd SCManager::makeSectorkeyFromScancontext( Eigen::MatrixXd &_desc )
 {
     /* 
@@ -226,12 +226,12 @@ MatrixXd SCManager::makeSectorkeyFromScancontext( Eigen::MatrixXd &_desc )
     return variant_key;
 } // SCManager::makeSectorkeyFromScancontext
 
-
+//点云特征的提取
 void SCManager::makeAndSaveScancontextAndKeys( pcl::PointCloud<SCPointType> & _scan_down )
 {
-    Eigen::MatrixXd sc = makeScancontext(_scan_down); // v1 
-    Eigen::MatrixXd ringkey = makeRingkeyFromScancontext( sc );
-    Eigen::MatrixXd sectorkey = makeSectorkeyFromScancontext( sc );
+    Eigen::MatrixXd sc = makeScancontext(_scan_down); // v1 提取SC描述符
+    Eigen::MatrixXd ringkey = makeRingkeyFromScancontext( sc );// 求ring key特征
+    Eigen::MatrixXd sectorkey = makeSectorkeyFromScancontext( sc );// 求sector key特征
     std::vector<float> polarcontext_invkey_vec = eig2stdvec( ringkey );
 
     polarcontexts_.push_back( sc ); 
@@ -243,7 +243,7 @@ void SCManager::makeAndSaveScancontextAndKeys( pcl::PointCloud<SCPointType> & _s
 
 } // SCManager::makeAndSaveScancontextAndKeys
 
-
+//闭环检测流程
 std::pair<int, float> SCManager::detectLoopClosureID ( void )
 {
     int loop_id { -1 }; // init with -1, -1 means no loop (== LeGO-LOAM's variable "closestHistoryFrameID")
